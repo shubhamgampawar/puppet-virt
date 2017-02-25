@@ -177,6 +177,11 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     warnonce "It is not possible to change interfaces settings for an existing guest."
     resource[:interfaces]
   end
+        
+  def macaddrs
+    warnonce "It is not possible to change interfaces settings for an existing guest."
+    resource[:macaddrs]
+  end
 
   #TODO the Libvirt biding for ruby doesnt support this feature
   def interfaces=(value)
