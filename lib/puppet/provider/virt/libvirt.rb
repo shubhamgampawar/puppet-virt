@@ -127,7 +127,7 @@ Puppet::Type.type(:virt).provide(:libvirt) do
   def diskargs
     parameters = ""
     parameters = resource[:virt_path] if resource[:virt_path]
-    parameters.concat("," + resource[:disk_size]) if resource[:disk_size]
+    parameters.concat(",format=qcow2," + resource[:disk_size]) if resource[:disk_size]
     parameters.empty? ? [] : ["--disk", parameters]
   end
   
