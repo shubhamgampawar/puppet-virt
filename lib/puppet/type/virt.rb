@@ -394,7 +394,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
       end
     end
     
-    newproperty(:disk_path, :array_matching => :all) do
+    newparam(:disk_path, :array_matching => :all) do
       desc "Mainly for additional disks in format ['/var/lib/libvirt/images/test1.qcow2','/var/lib/libvirt/images/test2.qcow2']"
       validate do |value|
         unless value.is_a?(Array) or value.is_a?(String)
