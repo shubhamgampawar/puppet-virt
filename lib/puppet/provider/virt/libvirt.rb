@@ -156,6 +156,8 @@ Puppet::Type.type(:virt).provide(:libvirt) do
       nettype='e1000'
     else
       nettype='virtio'
+    end
+    
     case iface
     when nil
       network = ["--network", "network=default"]
