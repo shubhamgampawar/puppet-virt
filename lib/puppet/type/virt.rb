@@ -403,6 +403,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
       end
     end
 
+    
     newproperty(:quotatime, :parent => VirtNumericParam, :required_features => :disk_quota) do
       desc "Sets soft overusage time limit for disk quota (also known as grace period)."
     end
@@ -455,6 +456,18 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
     # Will it install using PXE?
     newparam(:pxe, :required_features => :pxe) do
       desc "Use the PXE boot protocol to load the initial ramdisk and kernel for starting the guest installation process. PXE is only available for Xen fullyvirtualizated guests"
+      newvalues(:true)
+      newvalues(:false)
+
+      munge do |value|
+        @resource.munge_boolean(value)
+      end
+
+      defaultto(:false)
+    end
+
+   newparam(:e1000) do
+      desc "to use e1000 or not"
       newvalues(:true)
       newvalues(:false)
 
