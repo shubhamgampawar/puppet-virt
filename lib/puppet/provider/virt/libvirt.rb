@@ -152,13 +152,17 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     network = []
 
     iface = resource[:interfaces]
+    if resource[:e1000]
+      nettype='e1000'
+    else
+      nettype='virtio'
     case iface
     when nil
       network = ["--network", "network=default"]
     when "disabled"
       network = ["--nonetworks"]
     else
-      iface.each { |iface| network << ["--network","bridge="+iface+",model=virtio"] if interface?(iface) }
+      iface.each { |iface| network << ["--network","bridge="+iface+",model="+nettype] if interface?(iface) }
     end
 
     macs = resource[:macaddrs]
