@@ -152,7 +152,12 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     network = []
 
     iface = resource[:interfaces]
-    if resource[:e1000]
+    virtint= resource[:e1000]
+
+    case virtint
+    when nil
+      nettype='virtio'
+    when "true"
       nettype='e1000'
     else
       nettype='virtio'
