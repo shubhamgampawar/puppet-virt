@@ -157,7 +157,7 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     case virtint
     when nil
       nettype='virtio'
-    when "true"
+    when :true
       nettype='e1000'
     else
       nettype='virtio'
