@@ -394,6 +394,16 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
       end
     end
 
+    newparam(:disk_path, :array_matching => :all) do
+      desc "Mainly for additional disks in format ['/var/lib/libvirt/images/test1.qcow2','/var/lib/libvirt/images/test2.qcow2']"
+      validate do |value|
+        unless value.is_a?(Array) or value.is_a?(String)
+          self.devfail "interfaces field must be a String or an Array"
+        end
+      end
+    end
+
+
     newproperty(:quotatime, :parent => VirtNumericParam, :required_features => :disk_quota) do
       desc "Sets soft overusage time limit for disk quota (also known as grace period)."
     end
@@ -446,6 +456,30 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
     # Will it install using PXE?
     newparam(:pxe, :required_features => :pxe) do
       desc "Use the PXE boot protocol to load the initial ramdisk and kernel for starting the guest installation process. PXE is only available for Xen fullyvirtualizated guests"
+      newvalues(:true)
+      newvalues(:false)
+
+      munge do |value|
+        @resource.munge_boolean(value)
+      end
+
+      defaultto(:false)
+    end
+
+   newparam(:e1000) do
+      desc "to use e1000 or not"
+      newvalues(:true)
+      newvalues(:false)
+
+      munge do |value|
+        @resource.munge_boolean(value)
+      end
+
+      defaultto(:false)
+    end
+
+   newparam(:passthrough) do
+      desc "to pass model or not"
       newvalues(:true)
       newvalues(:false)
 
@@ -557,6 +591,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
         end
       end
     end
+
 
     newproperty(:macaddrs, :array_matching => :all) do
       desc "Fixed MAC address for the guest;
