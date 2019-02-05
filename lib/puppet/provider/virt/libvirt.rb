@@ -50,7 +50,7 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     else
       debug "Virtualization type: %s" % [resource[:virt_type]]
 
-      args = generalargs(bootoninstall) + network + graphic + bootargs
+      args = generalargs(bootoninstall) + cpumodel + network + graphic + bootargs
       debug "[INFO] virt-install arguments: #{args}"
       virtinstall args
     end
@@ -130,11 +130,11 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     parameters.concat(",format=qcow2," + resource[:disk_size]) if resource[:disk_size]
     parameters.empty? ? [] : ["--disk", parameters]
   end
-  
+
   def adddiskargs
     params = resource[:disk_path] if resource[:disk_path]
     parameters = []
-    params.each { |disk| parameters << ["--disk", disk+",bus=virtio"] } 
+    params.each { |disk| parameters << ["--disk", disk+",bus=virtio"] }
     return parameters
   end
 
@@ -162,7 +162,7 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     else
       nettype='virtio'
     end
-    
+
     case iface
     when nil
       network = ["--network", "network=default"]
@@ -196,7 +196,7 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     warnonce "It is not possible to change interfaces settings for an existing guest."
     resource[:interfaces]
   end
-        
+
   def macaddrs
     warnonce "It is not possible to change interfaces settings for an existing guest."
     resource[:macaddrs]
@@ -231,6 +231,23 @@ Puppet::Type.type(:virt).provide(:libvirt) do
     else
       fail "Error: XML file not found: " + resource[:xml_file]
     end
+  end
+
+  def cpumodel
+    debug "CPU models"
+    cpumodel = []
+
+    model = resource[:passthrough]
+
+    case model
+    when nil
+      cpumodel = [""]
+    when "false"
+      cpumodel = [""]
+    else
+      cpumodel = ["--cpu=host"]
+    end
+    return cpumodel
   end
 
   # Changing ensure to absent

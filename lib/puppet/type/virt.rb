@@ -393,7 +393,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
         "size=" + value
       end
     end
-    
+
     newparam(:disk_path, :array_matching => :all) do
       desc "Mainly for additional disks in format ['/var/lib/libvirt/images/test1.qcow2','/var/lib/libvirt/images/test2.qcow2']"
       validate do |value|
@@ -403,7 +403,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
       end
     end
 
-    
+
     newproperty(:quotatime, :parent => VirtNumericParam, :required_features => :disk_quota) do
       desc "Sets soft overusage time limit for disk quota (also known as grace period)."
     end
@@ -468,6 +468,18 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
 
    newparam(:e1000) do
       desc "to use e1000 or not"
+      newvalues(:true)
+      newvalues(:false)
+
+      munge do |value|
+        @resource.munge_boolean(value)
+      end
+
+      defaultto(:false)
+    end
+
+   newparam(:passthrough) do
+      desc "to pass model or not"
       newvalues(:true)
       newvalues(:false)
 
@@ -579,7 +591,7 @@ Image files must end with `*.img`, `*.qcow` or `*.qcow2`"
         end
       end
     end
-    
+
 
     newproperty(:macaddrs, :array_matching => :all) do
       desc "Fixed MAC address for the guest;
